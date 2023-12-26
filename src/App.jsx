@@ -1,7 +1,9 @@
-export default function src() {
+import Header from "./components/Header";
+
+export default function App() {
   return (
-    <div>
-      <h1>Dev Finances</h1>
-    </div>
+    <>
+      <Header />
+    </>
   );
 }
