@@ -1,15 +1,14 @@
-import { useState } from "react";
 import Balance from "./components/Balance";
 import Header from "./components/Header";
 import Table from "./components/Table";
+import { TransactionContextProvider } from "./contexts/TransactionContext";
 
 export default function App() {
-  const [balance, setBalance] = useState([]);
   return (
-    <>
+    <TransactionContextProvider>
       <Header />
       <Balance />
       <Table />
-    </>
+    </TransactionContextProvider>
   );
 }

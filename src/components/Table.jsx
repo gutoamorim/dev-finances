@@ -1,7 +1,9 @@
-import edit from "../assets/edit.svg";
-import trash from "../assets/trash.svg";
+import { useContext } from "react";
+import { TransactionContext } from "../contexts/TransactionContext";
 
-export default function Table({ balance }) {
+export default function Table() {
+  const transactions = useContext(TransactionContext);
+
   return (
     <div className="container m-auto mt-12">
       <table className="w-full">
@@ -14,12 +16,20 @@ export default function Table({ balance }) {
           </tr>
         </thead>
         <tbody className="bg-slate-200">
-          <tr>
-            <td className="p-2 my-2">Luz</td>
-            <td>R$ 200,00</td>
-            <td>26/12/2023</td>
-            <td></td>
-          </tr>
+          {transactions &&
+            transactions.map((transaction) => (
+              <tr key={transaction.id}>
+                <td className="p-2 my-2">{transaction.description}</td>
+                <td>
+                  {transaction.amount.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
+                </td>
+                <td>{transaction.date}</td>
+                <td></td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>
