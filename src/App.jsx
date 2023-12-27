@@ -8,6 +8,10 @@ import { TransactionContextProvider } from "./contexts/TransactionContext";
 export default function App() {
   const [modal, setModal] = useState(false);
 
+  function toggleModal() {
+    setModal((modal) => !modal);
+  }
+
   return (
     <TransactionContextProvider>
       <Header />
@@ -15,13 +19,13 @@ export default function App() {
       <div className="container m-auto mt-10 -mb-5 text-right">
         <button
           className="border bg-green-700 p-2 rounded-md text-white"
-          onClick={() => setModal((modal) => !modal)}
+          onClick={() => toggleModal()}
         >
           + Nova Transação
         </button>
       </div>
       <Table />
-      {modal && <Modal />}
+      {modal && <Modal toggleModal={toggleModal} />}
     </TransactionContextProvider>
   );
 }
