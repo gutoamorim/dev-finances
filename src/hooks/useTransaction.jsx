@@ -7,18 +7,21 @@ export default function useTransaction() {
       description: "Salário",
       amount: 9000,
       date: "26/12/2023",
+      type: "receita",
     },
     {
       id: 2,
       description: "agua",
       amount: -32,
       date: "26/12/2023",
+      type: "despeza",
     },
     {
       id: 3,
       description: "Internet",
       amount: -100,
       date: "26/12/2023",
+      type: "despeza",
     },
   ]);
 
