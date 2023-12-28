@@ -8,12 +8,13 @@ const defaultTransaction = {
   date: "",
 };
 
-export default function Modal({ toggleModal, transactionUpdate }) {
+export default function Modal({ modal, setModal, transactionUpdate }) {
+  if (!modal) return null;
   const [transaction, setTransaction] = useState(
     transactionUpdate ? transactionUpdate : defaultTransaction
   );
 
-  const { addTransaction } = useContext(TransactionContext);
+  const { addTransaction, updateTransaction } = useContext(TransactionContext);
 
   function handlechange(ev) {
     setTransaction((currentState) => {
@@ -26,10 +27,14 @@ export default function Modal({ toggleModal, transactionUpdate }) {
 
   function handleSubmit(ev) {
     ev.preventDefault();
-    const newTransaction = new Transaction(transaction);
-    console.log(newTransaction);
-    addTransaction(newTransaction);
-    toggleModal();
+
+    if (transactionUpdate) {
+      updateTransaction(transactionUpdate.id, transaction);
+    } else {
+      const newTransaction = new Transaction(transaction);
+      addTransaction(newTransaction);
+    }
+    setModal((state) => !state);
   }
 
   return (
@@ -77,7 +82,7 @@ export default function Modal({ toggleModal, transactionUpdate }) {
               Salvar
             </button>
             <a
-              onClick={toggleModal}
+              onClick={() => setModal((state) => !state)}
               href="#"
               className="w-1/2 border border-red-500 py-2 text-red-500 hover:border-red-700 hover:text-red-700 text-center"
             >

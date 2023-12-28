@@ -8,22 +8,19 @@ import Button from "./components/Button";
 
 export default function App() {
   const [modal, setModal] = useState(false);
-
-  function toggleModal() {
-    setModal((modal) => !modal);
-  }
-
-  function editItem(item) {
-    return <Modal toggleModal={toggleModal} transactionUpdate={item} />;
-  }
+  const [transaction, setTransaction] = useState(null);
 
   return (
     <TransactionContextProvider>
       <Header />
       <Balance />
-      <Button toggleModal={toggleModal} />
-      <Table />
-      {modal && <Modal toggleModal={toggleModal} />}
+      <Button setModal={setModal} setTransaction={setTransaction} />
+      <Table setModal={setModal} setTransaction={setTransaction} />
+      <Modal
+        modal={modal}
+        setModal={setModal}
+        transactionUpdate={transaction}
+      />
     </TransactionContextProvider>
   );
 }

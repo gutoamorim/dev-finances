@@ -29,6 +29,15 @@ export default function useTransaction() {
     });
   };
 
+  const updateTransaction = (itemId, newAtributes) => {
+    setTransactions((currentState) => {
+      const itemIndex = currentState.findIndex((item) => item.id === +itemId);
+      const updatedItems = [...currentState];
+      Object.assign(updatedItems[itemIndex], newAtributes);
+      return updatedItems;
+    });
+  };
+
   return {
     transactions,
     amounts,
@@ -36,5 +45,6 @@ export default function useTransaction() {
     expenses,
     addTransaction,
     deleteTransaction,
+    updateTransaction,
   };
 }

@@ -3,7 +3,7 @@ import { TransactionContext } from "../contexts/TransactionContext";
 import edit from "../assets/edit.svg";
 import trash from "../assets/trash.svg";
 
-export default function Table() {
+export default function Table({ setModal, setTransaction }) {
   const { transactions, deleteTransaction } = useContext(TransactionContext);
 
   if (transactions.length === 0)
@@ -12,6 +12,11 @@ export default function Table() {
         Você não possui transações adicionadas.
       </p>
     );
+
+  function handleEdit(transaction) {
+    setTransaction(transaction);
+    setModal((state) => !state);
+  }
 
   return (
     <div className="container m-auto mt-12">
@@ -35,7 +40,7 @@ export default function Table() {
                     currency: "BRL",
                   })}
                 </td>
-                <td>{transaction.date.toLocaleDateString()}</td>
+                <td>{transaction.date}</td>
                 <td className="w-1/12">
                   <button>
                     <img
@@ -43,7 +48,7 @@ export default function Table() {
                       src={edit}
                       alt="Editar"
                       title="Editar"
-                      // onClick={() => editItem(transaction)}
+                      onClick={() => handleEdit(transaction)}
                     />
                   </button>
                   <button>
