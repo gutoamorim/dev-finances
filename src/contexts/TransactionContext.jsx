@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext } from "react";
 import useTransaction from "../hooks/useTransaction";
 
 export const TransactionContext = createContext();

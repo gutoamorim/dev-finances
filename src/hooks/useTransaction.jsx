@@ -20,11 +20,21 @@ export default function useTransaction() {
     });
   };
 
+  const deleteTransaction = (id) => {
+    setTransactions((currentState) => {
+      const update = currentState.filter(
+        (transaction) => transaction.id !== id
+      );
+      return update;
+    });
+  };
+
   return {
     transactions,
     amounts,
     incomes,
     expenses,
     addTransaction,
+    deleteTransaction,
   };
 }

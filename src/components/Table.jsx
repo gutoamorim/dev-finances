@@ -2,10 +2,9 @@ import { useContext } from "react";
 import { TransactionContext } from "../contexts/TransactionContext";
 import edit from "../assets/edit.svg";
 import trash from "../assets/trash.svg";
-import Modal from "./Modal";
 
 export default function Table() {
-  const { transactions } = useContext(TransactionContext);
+  const { transactions, deleteTransaction } = useContext(TransactionContext);
 
   if (transactions.length === 0)
     return (
@@ -28,7 +27,7 @@ export default function Table() {
         <tbody className="bg-slate-200">
           {transactions &&
             transactions.map((transaction) => (
-              <tr key={transaction.description}>
+              <tr key={transaction.id}>
                 <td className="p-2 my-2">{transaction.description}</td>
                 <td>
                   {transaction.amount.toLocaleString("pt-BR", {
@@ -53,6 +52,7 @@ export default function Table() {
                       src={trash}
                       alt="Excluir"
                       title="Excluir"
+                      onClick={() => deleteTransaction(transaction.id)}
                     />
                   </button>
                 </td>

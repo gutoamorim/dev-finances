@@ -32,11 +32,6 @@ export default function Modal({ toggleModal, transactionUpdate }) {
     toggleModal();
   }
 
-  function closeModal() {
-    console.log(modal);
-    toggleModal();
-  }
-
   return (
     <div className="w-full h-full absolute top-0 left-0 bg-slate-900/50 flex items-center justify-center">
       <div className="w-2/5 h-auto bg-slate-200 rounded-md p-8">
@@ -82,7 +77,7 @@ export default function Modal({ toggleModal, transactionUpdate }) {
               Salvar
             </button>
             <a
-              onClick={() => closeModal()}
+              onClick={toggleModal}
               href="#"
               className="w-1/2 border border-red-500 py-2 text-red-500 hover:border-red-700 hover:text-red-700 text-center"
             >
