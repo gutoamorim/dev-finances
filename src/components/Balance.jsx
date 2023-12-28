@@ -2,22 +2,11 @@ import Card from "./Card";
 import income from "../assets/income.svg";
 import expense from "../assets/expense.svg";
 import total from "../assets/total.svg";
-import { useContext } from "react";
 import { TransactionContext } from "../contexts/TransactionContext";
+import { useContext } from "react";
 
 export default function Balance() {
-  const transactions = useContext(TransactionContext);
-
-  const balance = transactions.map((transaction) => transaction.amount);
-
-  const expenses = balance
-    .filter((expense) => expense < 0)
-    .reduce((a, b) => a + b, 0);
-
-  const incomes = balance
-    .filter((expense) => expense > 0)
-    .reduce((a, b) => a + b, 0);
-
+  const { incomes, expenses } = useContext(TransactionContext);
   const saldo = incomes + expenses;
 
   return (

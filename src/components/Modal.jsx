@@ -1,17 +1,40 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { TransactionContext } from "../contexts/TransactionContext";
 
-export default function Modal({ toggleModal }) {
-  const [typeTransaction, setTypeTransaction] = useState(null);
+const defaultTransaction = {
+  type: null,
+  description: "",
+  amount: "",
+  date: "",
+};
 
-  function handleRadio({ target }) {
-    setTypeTransaction(target.value);
+export default function Modal({ toggleModal, transactionUpdate }) {
+  const [transaction, setTransaction] = useState(
+    transactionUpdate ? transactionUpdate : defaultTransaction
+  );
+
+  const { addTransaction } = useContext(TransactionContext);
+
+  function handlechange(ev) {
+    setTransaction((currentState) => {
+      return {
+        ...currentState,
+        [ev.target.name]: ev.target.value,
+      };
+    });
+  }
+
+  function handleSubmit(ev) {
+    ev.preventDefault();
+    addTransaction(transaction);
+    toggleModal();
   }
 
   return (
     <div className="w-full h-full absolute top-0 left-0 bg-slate-900/50 flex items-center justify-center">
       <div className="w-2/5 h-auto bg-slate-200 rounded-md p-8">
         <h1 className="text-2xl mb-2 font-medium">Nova Transação</h1>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div>
             <h2 className="mb-1 font-medium">Tipo de transação:</h2>
             <div className="flex gap-3 mb-2">
@@ -21,7 +44,7 @@ export default function Modal({ toggleModal }) {
                   type="radio"
                   name="type"
                   value="receita"
-                  onChange={handleRadio}
+                  onChange={handlechange}
                 />
                 Receita
               </label>
@@ -31,7 +54,7 @@ export default function Modal({ toggleModal }) {
                   type="radio"
                   name="type"
                   value="despeza"
-                  onChange={handleRadio}
+                  onChange={handlechange}
                 />
                 Despeza
               </label>
@@ -42,21 +65,33 @@ export default function Modal({ toggleModal }) {
             <input
               className="bg-slate-300 p-1 outline-green-400 rounded-md"
               type="text"
+              name="description"
+              id="description"
+              value={transaction.description}
+              onChange={handlechange}
             />
           </div>
           <div className="flex gap-4 mb-5">
             <div className="flex flex-col w-1/2">
-              <label htmlFor="description">Valor</label>
+              <label htmlFor="amount">Valor</label>
               <input
                 className="bg-slate-300 p-1  outline-green-300 rounded-md"
                 type="number"
+                name="amount"
+                id="amount"
+                value={transaction.amount}
+                onChange={handlechange}
               />
             </div>
             <div className="flex flex-col w-1/2">
-              <label htmlFor="description">Data</label>
+              <label htmlFor="date">Data</label>
               <input
                 className="bg-slate-300 p-1  outline-green-300 rounded-md"
                 type="date"
+                name="date"
+                id="date"
+                value={transaction.date}
+                onChange={handlechange}
               />
             </div>
           </div>

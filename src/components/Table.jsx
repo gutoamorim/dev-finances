@@ -4,7 +4,7 @@ import edit from "../assets/edit.svg";
 import trash from "../assets/trash.svg";
 
 export default function Table() {
-  const transactions = useContext(TransactionContext);
+  const { transactions } = useContext(TransactionContext);
 
   return (
     <div className="container m-auto mt-12">
@@ -20,7 +20,7 @@ export default function Table() {
         <tbody className="bg-slate-200">
           {transactions &&
             transactions.map((transaction) => (
-              <tr key={transaction.id}>
+              <tr key={transaction.description}>
                 <td className="p-2 my-2">{transaction.description}</td>
                 <td>
                   {transaction.amount.toLocaleString("pt-BR", {
