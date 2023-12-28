@@ -7,7 +7,7 @@ import { useContext } from "react";
 
 export default function Balance() {
   const { incomes, expenses } = useContext(TransactionContext);
-  const saldo = incomes + expenses;
+  const balance = incomes + expenses;
 
   return (
     <section className="container m-auto flex items-center justify-around -mt-12">
@@ -32,10 +32,10 @@ export default function Balance() {
         })}
       />
       <Card
-        type="Total"
+        type="Saldo"
         bg="bg-white"
         svg={total}
-        value={saldo.toLocaleString("pt-BR", {
+        value={balance.toLocaleString("pt-BR", {
           style: "currency",
           currency: "BRL",
         })}

@@ -1,31 +1,9 @@
 import { createContext, useState } from "react";
-import useTransaction from "../hooks/useTransaction";
-
-const teste = [
-  {
-    type: "despeza",
-    description: "Luz",
-    amount: -150,
-    date: "25/12/2023",
-  },
-  {
-    type: "despeza",
-    description: "Agua",
-    amount: -50,
-    date: "25/12/2023",
-  },
-  {
-    type: "receita",
-    description: "Web Site",
-    amount: 3000,
-    date: "25/12/2023",
-  },
-];
 
 export const TransactionContext = createContext();
 
 export function TransactionContextProvider({ children }) {
-  const [transactions, setTransactions] = useState(teste);
+  const [transactions, setTransactions] = useState([]);
 
   const amounts = transactions.map((transaction) => transaction.amount);
   const incomes = amounts

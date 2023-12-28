@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { TransactionContext } from "../contexts/TransactionContext";
+import { Transaction } from "../models/Transaction";
 
 const defaultTransaction = {
   type: null,
@@ -26,7 +27,9 @@ export default function Modal({ toggleModal, transactionUpdate }) {
 
   function handleSubmit(ev) {
     ev.preventDefault();
-    addTransaction(transaction);
+    const newTransaction = new Transaction(transaction);
+    console.log(newTransaction);
+    addTransaction(newTransaction);
     toggleModal();
   }
 
@@ -35,31 +38,6 @@ export default function Modal({ toggleModal, transactionUpdate }) {
       <div className="w-2/5 h-auto bg-slate-200 rounded-md p-8">
         <h1 className="text-2xl mb-2 font-medium">Nova Transação</h1>
         <form onSubmit={handleSubmit}>
-          <div>
-            <h2 className="mb-1 font-medium">Tipo de transação:</h2>
-            <div className="flex gap-3 mb-2">
-              <label>
-                <input
-                  className="mr-1"
-                  type="radio"
-                  name="type"
-                  value="receita"
-                  onChange={handlechange}
-                />
-                Receita
-              </label>
-              <label>
-                <input
-                  className="mr-1"
-                  type="radio"
-                  name="type"
-                  value="despeza"
-                  onChange={handlechange}
-                />
-                Despeza
-              </label>
-            </div>
-          </div>
           <div className="flex flex-col mb-2">
             <label htmlFor="description">Descrição</label>
             <input

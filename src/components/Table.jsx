@@ -5,7 +5,12 @@ import trash from "../assets/trash.svg";
 
 export default function Table() {
   const { transactions } = useContext(TransactionContext);
-
+  if (transactions.length === 0)
+    return (
+      <p className="text-center text-2xl mt-16 font-medium">
+        Você não possui transações adicionadas.
+      </p>
+    );
   return (
     <div className="container m-auto mt-12">
       <table className="w-full">
@@ -28,7 +33,7 @@ export default function Table() {
                     currency: "BRL",
                   })}
                 </td>
-                <td>{transaction.date}</td>
+                <td>{transaction.date.toLocaleDateString()}</td>
                 <td className="w-1/12">
                   <button>
                     <img
