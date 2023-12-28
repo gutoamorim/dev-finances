@@ -2,15 +2,18 @@ import { useContext } from "react";
 import { TransactionContext } from "../contexts/TransactionContext";
 import edit from "../assets/edit.svg";
 import trash from "../assets/trash.svg";
+import Modal from "./Modal";
 
 export default function Table() {
   const { transactions } = useContext(TransactionContext);
+
   if (transactions.length === 0)
     return (
       <p className="text-center text-2xl mt-16 font-medium">
         Você não possui transações adicionadas.
       </p>
     );
+
   return (
     <div className="container m-auto mt-12">
       <table className="w-full">
@@ -41,6 +44,7 @@ export default function Table() {
                       src={edit}
                       alt="Editar"
                       title="Editar"
+                      // onClick={() => editItem(transaction)}
                     />
                   </button>
                   <button>

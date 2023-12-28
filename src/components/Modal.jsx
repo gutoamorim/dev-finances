@@ -3,7 +3,6 @@ import { TransactionContext } from "../contexts/TransactionContext";
 import { Transaction } from "../models/Transaction";
 
 const defaultTransaction = {
-  type: null,
   description: "",
   amount: "",
   date: "",
@@ -30,6 +29,11 @@ export default function Modal({ toggleModal, transactionUpdate }) {
     const newTransaction = new Transaction(transaction);
     console.log(newTransaction);
     addTransaction(newTransaction);
+    toggleModal();
+  }
+
+  function closeModal() {
+    console.log(modal);
     toggleModal();
   }
 
@@ -78,7 +82,7 @@ export default function Modal({ toggleModal, transactionUpdate }) {
               Salvar
             </button>
             <a
-              onClick={toggleModal}
+              onClick={() => closeModal()}
               href="#"
               className="w-1/2 border border-red-500 py-2 text-red-500 hover:border-red-700 hover:text-red-700 text-center"
             >
