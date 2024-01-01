@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function useTransaction() {
   const [transactions, setTransactions] = useState([]);
@@ -16,6 +17,7 @@ export default function useTransaction() {
   const addTransaction = (transaction) => {
     setTransactions((currentState) => {
       const update = [...currentState, transaction];
+      toast.success("Transação adicionada com sucesso.");
       return update;
     });
   };
@@ -25,6 +27,7 @@ export default function useTransaction() {
       const update = currentState.filter(
         (transaction) => transaction.id !== id
       );
+      toast.success("Transação removida com sucesso!");
       return update;
     });
   };
@@ -34,6 +37,7 @@ export default function useTransaction() {
       const itemIndex = currentState.findIndex((item) => item.id === +itemId);
       const updatedItems = [...currentState];
       Object.assign(updatedItems[itemIndex], newAtributes);
+      toast.success("Transação alterada com sucesso!");
       return updatedItems;
     });
   };
