@@ -3,8 +3,8 @@ import { TransactionContext } from "../contexts/TransactionContext";
 import edit from "../assets/edit.svg";
 import trash from "../assets/trash.svg";
 
-export default function Table({ setModal, setTransaction }) {
-  const { transactions, deleteTransaction } = useContext(TransactionContext);
+export default function Table({ setModal, setTransaction, setId }) {
+  const { transactions } = useContext(TransactionContext);
 
   if (transactions.length === 0)
     return (
@@ -14,6 +14,12 @@ export default function Table({ setModal, setTransaction }) {
     );
 
   function handleEdit(transaction) {
+    setTransaction(transaction);
+    setModal((state) => !state);
+  }
+
+  function handleDelete(id, transaction) {
+    setId(id);
     setTransaction(transaction);
     setModal((state) => !state);
   }
@@ -57,7 +63,7 @@ export default function Table({ setModal, setTransaction }) {
                       src={trash}
                       alt="Excluir"
                       title="Excluir"
-                      onClick={() => deleteTransaction(transaction.id)}
+                      onClick={() => handleDelete(transaction.id, transaction)}
                     />
                   </button>
                 </td>

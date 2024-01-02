@@ -17,7 +17,7 @@ export default function useTransaction() {
   const addTransaction = (transaction) => {
     setTransactions((currentState) => {
       const update = [...currentState, transaction];
-      toast.success("Transação adicionada com sucesso.");
+      toast.success("Transação adicionada com sucesso!");
       return update;
     });
   };
@@ -37,7 +37,7 @@ export default function useTransaction() {
       const itemIndex = currentState.findIndex((item) => item.id === +itemId);
       const updatedItems = [...currentState];
       Object.assign(updatedItems[itemIndex], newAtributes);
-      toast.success("Transação removida com sucesso!");
+      toast.success("Transação editada com sucesso!");
       return updatedItems;
     });
   };
