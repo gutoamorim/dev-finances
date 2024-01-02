@@ -40,7 +40,9 @@ export default function Modal({ modal, setModal, transactionUpdate }) {
   return (
     <div className="w-full h-full absolute top-0 left-0 bg-slate-900/50 flex items-center justify-center">
       <div className="w-2/5 h-auto bg-slate-200 rounded-md p-8">
-        <h1 className="text-2xl mb-2 font-medium">Nova Transação</h1>
+        <h1 className="text-2xl mb-2 font-medium">
+          {transactionUpdate ? "Editar Transação" : "Nova Transação"}
+        </h1>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col mb-2">
             <label htmlFor="description">Descrição</label>

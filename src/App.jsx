@@ -5,8 +5,6 @@ import Modal from "./components/Modal";
 import Table from "./components/Table";
 import { TransactionContextProvider } from "./contexts/TransactionContext";
 import Button from "./components/Button";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
   const [modal, setModal] = useState(false);
@@ -14,7 +12,6 @@ export default function App() {
 
   return (
     <TransactionContextProvider>
-      <ToastContainer autoClose={3000} />
       <Header />
       <Balance />
       <Button setModal={setModal} setTransaction={setTransaction} />

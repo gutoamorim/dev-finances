@@ -37,7 +37,7 @@ export default function useTransaction() {
       const itemIndex = currentState.findIndex((item) => item.id === +itemId);
       const updatedItems = [...currentState];
       Object.assign(updatedItems[itemIndex], newAtributes);
-      toast.success("Transação alterada com sucesso!");
+      toast.success("Transação removida com sucesso!");
       return updatedItems;
     });
   };
