@@ -2,7 +2,11 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 
 export default function useTransaction() {
-  const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState(() => {
+    const localTransactions = localStorage.getItem("transactions");
+    if (localTransactions) return JSON.parse(localTransactions);
+    return [];
+  });
 
   const amounts = transactions.map((transaction) => transaction.amount);
 
@@ -17,6 +21,7 @@ export default function useTransaction() {
   const addTransaction = (transaction) => {
     setTransactions((currentState) => {
       const update = [...currentState, transaction];
+      localStorage.setItem("transactions", JSON.stringify(update));
       toast.success("Transação adicionada com sucesso!");
       return update;
     });
@@ -27,6 +32,7 @@ export default function useTransaction() {
       const update = currentState.filter(
         (transaction) => transaction.id !== id
       );
+      localStorage.setItem("transactions", JSON.stringify(update));
       toast.success("Transação removida com sucesso!");
       return update;
     });
@@ -38,6 +44,7 @@ export default function useTransaction() {
       const updatedItems = [...currentState];
       Object.assign(updatedItems[itemIndex], newAtributes);
       toast.success("Transação editada com sucesso!");
+      localStorage.setItem("transactions", JSON.stringify(updatedItems));
       return updatedItems;
     });
   };
