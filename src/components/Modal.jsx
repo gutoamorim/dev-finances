@@ -30,7 +30,8 @@ export default function Modal({ modal, setModal, transactionUpdate, id }) {
     ev.preventDefault();
 
     if (transactionUpdate) {
-      updateTransaction(transactionUpdate.id, transaction);
+      const newTransaction = new Transaction(transaction);
+      updateTransaction(transactionUpdate.id, newTransaction);
     } else {
       const newTransaction = new Transaction(transaction);
       addTransaction(newTransaction);
