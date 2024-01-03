@@ -46,7 +46,7 @@ export default function Table({ setModal, setTransaction, setId }) {
                     currency: "BRL",
                   })}
                 </td>
-                <td>{transaction.date}</td>
+                <td>{transaction.date.split("-").reverse().join("/")}</td>
                 <td className="w-1/12">
                   <button>
                     <img
