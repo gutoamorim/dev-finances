@@ -47,7 +47,7 @@ export default function Modal({
 
   function handleDelete(id) {
     deleteTransaction(id);
-    setModal((state) => !state);
+    closeModal();
   }
 
   function closeModal() {
