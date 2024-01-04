@@ -31,6 +31,7 @@ export default function App() {
         setModal={setModal}
         transactionUpdate={transaction}
         id={id}
+        setId={setId}
       />
     </TransactionContextProvider>
   );

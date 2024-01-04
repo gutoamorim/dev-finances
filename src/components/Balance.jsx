@@ -10,7 +10,7 @@ export default function Balance() {
   const balance = incomes + expenses;
 
   return (
-    <section className="container m-auto flex items-center justify-around -mt-12">
+    <section className="container m-auto mt-5 flex flex-col items-center gap-2 md:flex-row md:justify-around md:-mt-12">
       <Card
         type="Entradas"
         bg="bg-green-800"

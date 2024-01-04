@@ -5,7 +5,7 @@ export default function Button({ setModal, setTransaction }) {
   }
 
   return (
-    <div className="container m-auto mt-10 -mb-5 text-right">
+    <div className="container m-auto mt-10 text-center -mb-5 md:text-right">
       <button
         className="border bg-green-700 p-2 rounded-md text-white"
         onClick={() => addTransaction()}
