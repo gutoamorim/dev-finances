@@ -77,6 +77,31 @@ main {
   margin-top: 2rem;
 }
 
+.serach-add {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.search {
+  width: 30%;
+  height: 2rem;
+  border: none;
+  padding: 0 1rem;
+  background-image: url("assets/search.svg");
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: 1.5em;
+  padding-right: 2rem;
+}
+
+.new {
+  color: #345029;
+  margin-left: auto;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
 .table table {
   width: 100%;
   border-spacing: 0 0.25rem;
