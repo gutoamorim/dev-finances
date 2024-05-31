@@ -161,3 +161,81 @@ footer p {
   text-align: center;
   font-size: 0.75rem;
 }
+
+.modal-overflow {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  width: 400px;
+  padding: 1rem;
+  background-color: #f0f2f5;
+  border-radius: 0.25rem;
+}
+
+.modal h1 {
+  font-size: 1.25rem;
+}
+
+.modal-content {
+  margin-top: 1rem;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.modal-content input {
+  height: 2rem;
+  border: none;
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  padding: 0 0.5rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.modal-actions button {
+  width: 100%;
+  height: 2rem;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.modal-actions button.cancel {
+  border: 1px solid #f87171;
+  color: #f87171;
+}
+
+.modal-actions button.cancel:hover {
+  border: 1px solid #ef4444;
+  color: #ef4444;
+}
+
+.modal-actions button.save {
+  border: 1px solid #16a34a;
+  background-color: #16a34a;
+  color: #fff;
+}
+
+.modal-actions button.save:hover {
+  border: 1px solid #15803d;
+  background-color: #15803d;
+  color: #fff;
+}
