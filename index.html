@@ -17,66 +17,86 @@
 
 <body>
     <header>
-        <h1>Dev Finance$</h1>
+        <img src="./assets/logo.svg" alt="Logo Dev Finances">
     </header>
 
-    <main>
+    <main class="container">
         <section id="balance">
             <div class="card">
                 <h2>
                     Entradas
+                    <img src="./assets/income.svg" alt="Imagem ilustrativa do card entradas">
                 </h2>
+                <p>R$ 5.000,00</p>
             </div>
             <div class="card">
                 <h2>
                     Saídas
+                    <img src="./assets/expense.svg" alt="Imagem ilustrativa do card saídas">
                 </h2>
+                <p>R$ 5.000,00</p>
             </div>
             <div class="card">
                 <h2>
                     Total
+                    <img src="./assets/total.svg" alt="Imagem ilustrativa do card total">
                 </h2>
+                <p>R$ 5.000,00</p>
             </div>
         </section>
 
         <section id="transactions">
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            Descrição
-                        </th>
-                        <th>
-                            Valor
-                        </th>
-                        <th>
-                            Data
-                        </th>
-                        <th>
-                            Ações
-                        </th>
-                    </tr>
-                </thead>
+            <div class="table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                Descrição
+                            </th>
+                            <th>
+                                Valor
+                            </th>
+                            <th>
+                                Data
+                            </th>
+                            <th>
+                                Ações
+                            </th>
+                        </tr>
+                    </thead>
 
-                <tbody>
-                    <tr>
-                        <td>Criação de Web site</td>
-                        <td>R$ 5.000,00</td>
-                        <td>31/05/2024</td>
-                        <td>edit trash</td>
-                    </tr>
-                    <tr>
-                        <td>Água</td>
-                        <td>R$ 90,00</td>
-                        <td>31/05/2024</td>
-                        <td>edit trash</td>
-                    </tr>
-                </tbody>
-            </table>
+                    <tbody>
+                        <tr>
+                            <td>Criação de Web site</td>
+                            <td>R$ 5.000,00</td>
+                            <td>31/05/2024</td>
+                            <td>
+                                <div class="actions">
+                                    <img src="./assets/edit.svg" alt="">
+                                    <img src="./assets/trash.svg" alt="">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Água</td>
+                            <td>R$ 90,00</td>
+                            <td>31/05/2024</td>
+                            <td>
+                                <div class="actions">
+                                    <img src="./assets/edit.svg" alt="">
+                                    <img src="./assets/trash.svg" alt="">
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
     </main>
 
-    <footer>Dev Finance$</footer>
+    <footer>
+        <p>dev.finance$</p>
+    </footer>
 </body>
 
 </html>
