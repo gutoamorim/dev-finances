@@ -89,7 +89,7 @@ function renderTransactions() {
       <td>
           <div class="actions">
               <img src="./assets/edit.svg" alt="">
-              <img src="./assets/trash.svg" alt="">
+              <img src="./assets/trash.svg" alt="" onclick="deleteTransaction(${transaction.id})">
           </div>
       </td>
       `;
@@ -127,6 +127,16 @@ function saveTransaction(transaction) {
   transactions.push(transaction);
   setLocalStorage(transactions);
   toggleModal();
+  renderTransactions();
+}
+
+function deleteTransaction(id) {
+  const updateTansactions = transactions.filter(
+    (transaction) => transaction.id !== id
+  );
+  setLocalStorage(updateTansactions);
+  transactions = updateTansactions;
+
   renderTransactions();
 }
 
