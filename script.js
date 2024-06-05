@@ -14,8 +14,9 @@ function setLocalStorage(transactions) {
 }
 
 function getLocalStorage() {
-  const transactions = localStorage.getItem("transactions");
-  return JSON.parse(transactions);
+  const transactions = JSON.parse(localStorage.getItem("transactions"));
+  id = transactions.length || 0;
+  return transactions;
 }
 
 function toggleModal(type) {
