@@ -31,7 +31,7 @@ function renderModal(type) {
   if (type) {
     if (type === "new") {
       body.innerHTML = renderNew();
-    } else if (type === "income" || type === "expense") {
+    } else {
       body.innerHTML = renderForm(type);
     }
     modal.appendChild(body);
@@ -56,21 +56,43 @@ function renderNew() {
 `;
 }
 
-function renderForm(type) {
+function renderForm(param) {
+  const transaction = transactions.find((t) => t.id === param);
+
+  const newTitle = `<h1>Adicionar ${
+    param === "income" ? "receita" : "despeza"
+  }</h1>`;
+
+  let editTitle;
+  if (transaction) {
+    editTitle = `  <h1>Editar ${
+      transaction.type === "income" ? "receita" : "despeza"
+    }</h1>`;
+  }
+
   return `
-  <h1>Adicionar ${type === "income" ? "receita" : "despeza"}</h1>
-  <div class="modal-content">
-    <form>
-      <input type="text" id="description" placeholder="Descrição..."/>
-      <input type="text" id="amount" placeholder="R$ 0,00"/>
-      <input type="date" id="date"/>
-      <div class="modal-actions">
-        <span class="button cancel" onclick="toggleModal()">cancelar</span>
-        <span class="button save" id="${type}" onclick="handleTransaction(this.id)">Salvar</span>
-      </div>
-    </form>
-  </div>
-`;
+    ${typeof param === "number" ? editTitle : newTitle}
+    <div class="modal-content">
+      <form>
+        <input type="hidden" id="id" " value='${
+          transaction ? transaction.id : ""
+        }'/>
+        <input type="text" id="description" placeholder="Descrição..." value='${
+          transaction ? transaction.description : ""
+        }'/>
+        <input type="text" id="amount" placeholder="R$ 0,00" value="${
+          transaction ? transaction.amount : ""
+        }"/>
+        <input type="date" id="date" value="${
+          transaction ? transaction.date : ""
+        }"/>
+        <div class="modal-actions">
+          <span class="button cancel" onclick="toggleModal()">cancelar</span>
+          <span class="button save" id="${param}" onclick="handleTransaction(this.id)">Salvar</span>
+        </div>
+      </form>
+    </div>
+  `;
 }
 
 function renderTransactions() {
@@ -88,7 +110,7 @@ function renderTransactions() {
       <td>${transaction.date}</td>
       <td>
           <div class="actions">
-              <img src="./assets/edit.svg" alt="">
+              <img src="./assets/edit.svg" alt="" onclick="toggleModal(${transaction.id})">
               <img src="./assets/trash.svg" alt="" onclick="deleteTransaction(${transaction.id})">
           </div>
       </td>
@@ -98,12 +120,15 @@ function renderTransactions() {
     });
   } else {
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td style="background-color: #f0f2f5; height: 3rem;" colspan=4><p style="text-align: center;">Você não possui transações adicionadas.</p></td>`;
+    tr.innerHTML = `<td style="background-color: #f0f2f5; height: 3rem;" colspan=4>
+                      <p style="text-align: center;"> Você não possui transações adicionadas.</p>
+                    </td>`;
     tbody.appendChild(tr);
   }
 }
 
 function handleTransaction(type) {
+  const tid = document.querySelector("#id").value.trim();
   const description = document.querySelector("#description").value.trim();
   const amount = document.querySelector("#amount").value.trim();
   const date = document.querySelector("#date").value.trim();
@@ -111,20 +136,38 @@ function handleTransaction(type) {
   if (description === "" || amount === "" || date === "") {
     alert("Por favor, preencha todos os campos!");
   } else {
-    id++;
-    const transaction = {
-      id,
-      description,
-      amount,
-      date,
-      type,
-    };
-    saveTransaction(transaction);
+    if (tid === "") {
+      id++;
+      const transaction = {
+        id,
+        description,
+        amount,
+        date,
+        type,
+      };
+      saveTransaction(transaction);
+    } else {
+      const transaction = {
+        description,
+        amount,
+        date,
+      };
+      saveTransaction(transaction, tid);
+    }
   }
 }
 
-function saveTransaction(transaction) {
-  transactions.push(transaction);
+function saveTransaction(transaction, tid) {
+  if (tid) {
+    const index = transactions.findIndex((t) => t.id === +tid);
+    console.log(index);
+    console.log(tid);
+    transactions[index].description = transaction.description;
+    transactions[index].amount = transaction.amount;
+    transactions[index].date = transaction.date;
+  } else {
+    transactions.push(transaction);
+  }
   setLocalStorage(transactions);
   toggleModal();
   renderTransactions();
@@ -138,6 +181,11 @@ function deleteTransaction(id) {
   transactions = updateTansactions;
 
   renderTransactions();
+}
+
+function editTransaction(id) {
+  const transaction = transactions.find((t) => t.id === id);
+  return transaction;
 }
 
 renderTransactions();
