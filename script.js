@@ -7,7 +7,7 @@ const modal = document.querySelector(".modal-overflow");
 let body = document.createElement("div");
 body.classList.add("modal");
 
-add.addEventListener("click", () => toggleModal("new"));
+add.addEventListener("click", toggleModal);
 
 function setLocalStorage(transactions) {
   localStorage.setItem("transactions", JSON.stringify(transactions));
@@ -19,24 +19,25 @@ function getLocalStorage() {
   return transactions;
 }
 
-function toggleModal(type) {
+function toggleModal(targetId, id) {
   modal.classList.toggle("active");
 
-  if (modal.classList.contains("active")) {
-    renderModal(type);
-  }
+  renderModal(targetId, id);
 }
 
-function renderModal(type) {
+function renderModal(targetId, id) {
+  console.log(targetId);
   body.innerHTML = "";
-  if (type) {
-    if (type === "new") {
-      body.innerHTML = renderNew();
-    } else {
-      body.innerHTML = renderForm(type);
-    }
-    modal.appendChild(body);
+  if (targetId === "income" || targetId === "expense") {
+    body.innerHTML = renderForm();
+  } else if (targetId === "edit") {
+    body.innerHTML = renderForm(id);
+  } else if (targetId === "trash") {
+    body.innerHTML = renderDeleteConfirm(id);
+  } else {
+    body.innerHTML = renderNew();
   }
+  modal.appendChild(body);
 }
 
 function renderNew() {
@@ -96,6 +97,19 @@ function renderForm(param) {
   `;
 }
 
+function renderDeleteConfirm(id) {
+  const transaction = transactions.find((t) => t.id === id);
+  return `
+  <div class="modal-content">
+    <p>Tem certeza que deseja excluir a transação <strong>${transaction.description}</strong>?</p>
+    <div class="modal-actions">
+      <span class="button cancel" onclick="toggleModal()">Não</span>
+      <span class="button save" onclick="deleteTransaction(${id})">Sim</span>
+    </div>
+  </div>
+  `;
+}
+
 function renderTransactions() {
   transactions = getLocalStorage() || [];
 
@@ -111,8 +125,8 @@ function renderTransactions() {
       <td>${transaction.date}</td>
       <td>
           <div class="actions">
-              <img src="./assets/edit.svg" alt="" onclick="toggleModal(${transaction.id})">
-              <img src="./assets/trash.svg" alt="" onclick="deleteTransaction(${transaction.id})">
+              <img src="./assets/edit.svg" alt="" id="edit" onclick="toggleModal(this.id, ${transaction.id})">
+              <img src="./assets/trash.svg" alt="" id="trash" onclick="toggleModal(this.id, ${transaction.id})">
           </div>
       </td>
       `;
@@ -175,6 +189,10 @@ function saveTransaction(transaction, tid) {
 }
 
 function deleteTransaction(id) {
+  const transaction = transactions.find((transaction) => transaction.id === id);
+
+  toggleModal();
+
   const updateTansactions = transactions.filter(
     (transaction) => transaction.id !== id
   );
