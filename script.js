@@ -33,8 +33,10 @@ function renderModal(targetId, id) {
   body.innerHTML = "";
   if (targetId === "income" || targetId === "expense") {
     body.innerHTML = renderForm(targetId);
+    formatCurrencyInput();
   } else if (targetId === "edit") {
     body.innerHTML = renderForm(id);
+    formatCurrencyInput();
   } else if (targetId === "trash") {
     body.innerHTML = renderDeleteConfirm(id);
   } else {
@@ -171,7 +173,10 @@ function renderBalance() {
 function handleTransaction(type) {
   const tid = document.querySelector("#id").value.trim();
   const description = document.querySelector("#description").value.trim();
-  const amount = document.querySelector("#amount").value.trim();
+  const amount =
+    Number(document.querySelector("#amount").value.trim().replace(/\D/g, "")) /
+    100;
+
   const date = document.querySelector("#date").value.trim();
 
   if (description === "" || amount === "" || date === "") {
@@ -233,6 +238,15 @@ function editTransaction(id) {
 
 function formatCurrency(value) {
   return value.toLocaleString("pt-br", { style: "currency", currency: "BRL" });
+}
+
+function formatCurrencyInput() {
+  const currencyInput = document.querySelector("#amount");
+  currencyInput.addEventListener("input", (e) => {
+    e.target.value = formatCurrency(
+      Number(e.target.value.replace(/\D/g, "") / 100)
+    );
+  });
 }
 
 renderTransactions();
