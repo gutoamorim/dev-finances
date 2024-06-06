@@ -121,11 +121,13 @@ function renderTransactions() {
 
   if (transactions && transactions.length > 0) {
     transactions.forEach((transaction) => {
+      const amount = formatCurrency(+transaction.amount);
+      const date = new Date(transaction.date).toLocaleDateString();
       const tr = document.createElement("tr");
       tr.innerHTML = `
       <td>${transaction.description}</td>
-      <td>${transaction.amount}</td>
-      <td>${transaction.date}</td>
+      <td>${amount}</td>
+      <td>${date}</td>
       <td>
           <div class="actions">
               <img src="./assets/edit.svg" alt="" id="edit" onclick="toggleModal(this.id, ${transaction.id})">
