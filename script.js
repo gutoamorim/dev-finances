@@ -1,6 +1,10 @@
 let transactions = [];
 let id = 0;
 
+const incomes = document.querySelector("#incomes");
+const expenses = document.querySelector("#expenses");
+const total = document.querySelector("#total");
+
 const add = document.querySelector("#new");
 const modal = document.querySelector(".modal-overflow");
 
@@ -26,10 +30,9 @@ function toggleModal(targetId, id) {
 }
 
 function renderModal(targetId, id) {
-  console.log(targetId);
   body.innerHTML = "";
   if (targetId === "income" || targetId === "expense") {
-    body.innerHTML = renderForm();
+    body.innerHTML = renderForm(targetId);
   } else if (targetId === "edit") {
     body.innerHTML = renderForm(id);
   } else if (targetId === "trash") {
@@ -140,6 +143,27 @@ function renderTransactions() {
                     </td>`;
     tbody.appendChild(tr);
   }
+
+  renderBalance();
+}
+
+function renderBalance() {
+  const transactions = getLocalStorage();
+  const totalIncomes = transactions
+    .filter((transaction) => transaction.type === "income")
+    .map((transaction) => +transaction.amount)
+    .reduce((a, b) => a + b, 0);
+
+  const totalExpenses = transactions
+    .filter((transaction) => transaction.type === "expense")
+    .map((transaction) => +transaction.amount)
+    .reduce((a, b) => a + b, 0);
+
+  const balance = totalIncomes - totalExpenses;
+
+  incomes.innerHTML = formatCurrency(totalIncomes);
+  expenses.innerHTML = formatCurrency(totalExpenses);
+  total.innerHTML = formatCurrency(balance);
 }
 
 function handleTransaction(type) {
@@ -175,8 +199,6 @@ function handleTransaction(type) {
 function saveTransaction(transaction, tid) {
   if (tid) {
     const index = transactions.findIndex((t) => t.id === +tid);
-    console.log(index);
-    console.log(tid);
     transactions[index].description = transaction.description;
     transactions[index].amount = transaction.amount;
     transactions[index].date = transaction.date;
@@ -205,6 +227,10 @@ function deleteTransaction(id) {
 function editTransaction(id) {
   const transaction = transactions.find((t) => t.id === id);
   return transaction;
+}
+
+function formatCurrency(value) {
+  return value.toLocaleString("pt-br", { style: "currency", currency: "BRL" });
 }
 
 renderTransactions();
