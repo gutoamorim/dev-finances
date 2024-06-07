@@ -1,25 +1,28 @@
-let transactions = [];
 let id = 0;
+let transactions = [];
+let search = [];
 
 const incomes = document.querySelector("#incomes");
 const expenses = document.querySelector("#expenses");
 const total = document.querySelector("#total");
-
+const searchInput = document.querySelector("#search");
 const add = document.querySelector("#new");
 const modal = document.querySelector(".modal-overflow");
 
 let body = document.createElement("div");
 body.classList.add("modal");
 
+searchInput.addEventListener("input", searchTransactions);
 add.addEventListener("click", toggleModal);
 
 function setLocalStorage(transactions) {
-  localStorage.setItem("transactions", JSON.stringify(transactions));
+  localStorage.setItem("@transactions", JSON.stringify(transactions));
+  localStorage.setItem("@id", String(id));
 }
 
 function getLocalStorage() {
-  const transactions = JSON.parse(localStorage.getItem("transactions"));
-  id = transactions.length || 0;
+  const transactions = JSON.parse(localStorage.getItem("@transactions"));
+  id = +localStorage.getItem("@id");
   return transactions;
 }
 
@@ -121,8 +124,16 @@ function renderTransactions() {
   const tbody = document.querySelector("tbody");
   tbody.innerHTML = "";
 
-  if (transactions && transactions.length > 0) {
-    transactions.forEach((transaction) => {
+  const render = search.length > 0 ? search : transactions;
+
+  if (searchInput.value.length > 0 && search.length === 0) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td style="background-color: #f0f2f5; height: 3rem;" colspan=4>
+                      <p style="text-align: center;">Termo de busca não encontrado.</p>
+                    </td>`;
+    tbody.appendChild(tr);
+  } else if (render && render.length > 0) {
+    render.forEach((transaction) => {
       const amount = formatCurrency(+transaction.amount);
       const date = new Date(transaction.date).toLocaleDateString();
       const tr = document.createElement("tr");
@@ -172,7 +183,10 @@ function renderBalance() {
 
 function handleTransaction(type) {
   const tid = document.querySelector("#id").value.trim();
-  const description = document.querySelector("#description").value.trim();
+  const description = document
+    .querySelector("#description")
+    .value.trim()
+    .toUpperCase();
   const amount =
     Number(document.querySelector("#amount").value.trim().replace(/\D/g, "")) /
     100;
@@ -236,17 +250,28 @@ function editTransaction(id) {
   return transaction;
 }
 
+function searchTransactions(e) {
+  const term = e.target.value;
+  search = transactions.filter((transaction) =>
+    transaction.description.includes(term.toUpperCase())
+  );
+
+  renderTransactions();
+}
+
 function formatCurrency(value) {
   return value.toLocaleString("pt-br", { style: "currency", currency: "BRL" });
 }
 
 function formatCurrencyInput() {
   const currencyInput = document.querySelector("#amount");
-  currencyInput.addEventListener("input", (e) => {
-    e.target.value = formatCurrency(
-      Number(e.target.value.replace(/\D/g, "") / 100)
-    );
-  });
+  if (currencyInput) {
+    currencyInput.addEventListener("input", (e) => {
+      e.target.value = formatCurrency(
+        Number(e.target.value.replace(/\D/g, "") / 100)
+      );
+    });
+  }
 }
 
 renderTransactions();
