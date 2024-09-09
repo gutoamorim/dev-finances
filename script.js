@@ -36,10 +36,8 @@ function renderModal(targetId, id) {
   body.innerHTML = "";
   if (targetId === "income" || targetId === "expense") {
     body.innerHTML = renderForm(targetId);
-    formatCurrencyInput();
   } else if (targetId === "edit") {
     body.innerHTML = renderForm(id);
-    formatCurrencyInput();
   } else if (targetId === "trash") {
     body.innerHTML = renderDeleteConfirm(id);
   } else {
@@ -91,8 +89,8 @@ function renderForm(param) {
           transaction ? transaction.description : ""
         }'/>
         <input type="text" id="amount" placeholder="R$ 0,00" value="${
-          transaction ? transaction.amount : ""
-        }"/>
+          transaction ? formatCurrency(transaction.amount) : ""
+        }" onkeyup="formatCurrencyInput()"/>
         <input type="date" id="date" value="${
           transaction ? transaction.date : ""
         }"/>
@@ -154,7 +152,7 @@ function renderTransactions() {
   } else {
     const tr = document.createElement("tr");
     tr.innerHTML = `<td style="background-color: #f0f2f5; height: 3rem;" colspan=4>
-                      <p style="text-align: center;"> Você não possui transações adicionadas.</p>
+                      <p> Você não possui transações adicionadas.</p>
                     </td>`;
     tbody.appendChild(tr);
   }
@@ -163,7 +161,9 @@ function renderTransactions() {
 }
 
 function renderBalance() {
-  const transactions = getLocalStorage();
+  let transactions = getLocalStorage() || [];
+  console.log("Transactions: ", transactions);
+
   const totalIncomes = transactions
     .filter((transaction) => transaction.type === "income")
     .map((transaction) => +transaction.amount)
