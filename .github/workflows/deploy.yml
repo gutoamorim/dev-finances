@@ -1,0 +1,24 @@
+name: Deploy via FTP
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to HostGator via FTP
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Upload files via FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server: ${{ secrets.FTP_SERVER }} # Coloque o FTP do seu domínio/subdomínio
+          username: ${{ secrets.FTP_USERNAME }} # Coloque o nome de usuário FTP
+          password: ${{ secrets.FTP_PASSWORD }} # Coloque a senha FTP
+          local-dir: ./ # O diretório que você quer enviar (ex: pasta build)
+          server-dir: /public_html/devfinances # O diretório de destino no servidor
