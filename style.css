@@ -19,7 +19,7 @@ header {
   text-align: center;
 }
 
-header h1 {
+header img {
   margin-top: 50px;
 }
 
@@ -51,6 +51,22 @@ main {
 .card h2 {
   font-size: 1rem;
   font-weight: normal;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fa-regular,
+.fa-solid {
+  font-size: 1.5rem;
+}
+
+.fa-circle-down {
+  color: #f87171;
+}
+
+.fa-circle-up {
+  color: #16a34a;
 }
 
 .card span {
@@ -104,6 +120,19 @@ thead {
 
 tbody {
   background-color: rgba(255, 255, 255, 0.7);
+}
+
+.action-area {
+  display: flex;
+  gap: 1rem;
+}
+
+.fa-solid {
+  cursor: pointer;
+}
+
+.fa-trash {
+  color: #f87171;
 }
 
 footer {
