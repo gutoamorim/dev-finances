@@ -4,6 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <title>Dev Finance$</title>
 </head>
@@ -14,7 +19,7 @@
   </header>
   <main>
 
-    <section id="balance">
+    <section id="balance" class="container">
       <div class="card">
         <h2>Entradas</h2>
         <span>R$ 5.000,00</span>
@@ -29,30 +34,53 @@
       </div>
     </section>
 
-    <section id="transactions">
-      <div>
-        <input type="text" placeholder="Buscar transação">
-        <button>+ Nova Transação</button>
+    <section id="transactions" class="container">
+
+      <div class="handle-transaction">
+        <input type="text" placeholder="Buscar transação" class="search">
+        <button class="new">+ Nova Transação</button>
       </div>
+
       <table>
         <thead>
-          <th>Descrição</th>
-          <th>Valor</th>
-          <th>Data</th>
-          <th>Ações</th>
+          <tr>
+            <th>Descrição</th>
+            <th>Valor</th>
+            <th>Data</th>
+            <th>Ações</th>
+          </tr>
         </thead>
         <tbody>
-          <td>Conta de água</td>
-          <td>R$ 75,00</td>
-          <td>15/05/2024</td>
-          <td>
-            editar
-            excluir
-          </td>
+          <tr>
+            <td>Conta de água</td>
+            <td>R$ 75,00</td>
+            <td>15/05/2024</td>
+            <td>
+              editar
+              excluir
+            </td>
+          </tr>
+          <tr>
+            <td>Conta de água</td>
+            <td>R$ 75,00</td>
+            <td>15/05/2024</td>
+            <td>
+              editar
+              excluir
+            </td>
+          </tr>
+          <tr>
+            <td>Conta de água</td>
+            <td>R$ 75,00</td>
+            <td>15/05/2024</td>
+            <td>
+              editar
+              excluir
+            </td>
+          </tr>
         </tbody>
       </table>
     </section>
-
   </main>
 
   <footer>
