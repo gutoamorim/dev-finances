@@ -38,7 +38,7 @@
 
       <div class="handle-transaction">
         <input type="text" placeholder="Buscar transação" class="search">
-        <button class="new">+ Nova Transação</button>
+        <button class="new" id="open-modal-btn">+ Nova Transação</button>
       </div>
 
       <table>
@@ -87,7 +87,7 @@
     <p>DevFinance$</p>
   </footer>
 
-  <div class="modal">
+  <div class="modal" id="modal">
     <div class="modal-content">
       <h2>Adicionar transação</h2>
       <form>
@@ -95,7 +95,7 @@
         <input type="text" placeholder="R$ 0,00">
         <input type="date" placeholder="dd/mm/aaaa">
         <div class="modal-btn-area">
-          <button class="cancel">Cancelar</button>
+          <button class="cancel" id="close-btn">Cancelar</button>
           <button class="save">Salvar</button>
         </div>
       </form>
