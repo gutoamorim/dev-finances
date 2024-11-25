@@ -111,3 +111,75 @@ footer {
   font-size: 0.75rem;
   color: #345029;
 }
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.modal-content {
+  background-color: #f0f2f5;
+  padding: 20px;
+  border: 1 solid #888;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 0.25rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.modal-content h2 {
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+form input {
+  font-size: 1rem;
+  padding: 0.5rem;
+  border: 0;
+  border-radius: 0.25rem;
+  outline: none;
+}
+
+.modal-btn-area {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+form button {
+  width: 100%;
+  font-size: 1rem;
+  border: 0;
+  background-color: transparent;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  border-radius: 0.25rem;
+}
+
+.cancel {
+  border: 1px solid #f87171;
+  color: #f87171;
+}
+
+.save {
+  background-color: #16a34a;
+  color: #fff;
+}
