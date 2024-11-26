@@ -11,17 +11,33 @@ const saveBtn = document.querySelector("#save-btn");
 const transactions = [];
 let id = 0;
 
-openModalBtn.onclick = () => {
-  modal.classList.add("show");
-  modal.classList.remove("hide");
-  descriptionField.focus();
-};
-
-closeBtn.onclick = (e) => {
+openModalBtn.addEventListener("click", (e) => {
   e.preventDefault();
-  modal.classList.add("hide");
-  modal.classList.remove("show");
-};
+  toggleModal();
+});
+
+closeBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  toggleModal();
+});
+
+function toggleModal() {
+  clearModal();
+  if (modal.classList.contains("show")) {
+    modal.classList.remove("show");
+    modal.classList.add("hide");
+  } else {
+    modal.classList.remove("hide");
+    modal.classList.add("show");
+    descriptionField.focus();
+  }
+}
+
+function clearModal() {
+  descriptionField.value = "";
+  amountField.value = "";
+  dateField.value = "";
+}
 
 function renderTransactions() {
   tbody.innerHTML = "";
@@ -64,11 +80,11 @@ function saveTransaction() {
   });
 
   renderTransactions();
+  clearModal();
 }
 
 saveBtn.addEventListener("click", (e) => {
   e.preventDefault();
   saveTransaction();
-  modal.classList.add("hide");
-  modal.classList.remove("show");
+  toggleModal();
 });
