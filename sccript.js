@@ -8,8 +8,10 @@ const dateField = document.querySelector("#date");
 const closeBtn = document.querySelector("#close-btn");
 const saveBtn = document.querySelector("#save-btn");
 
+const ediButtons = document.querySelectorAll(".fa-pen");
+
 let id = 0;
-const transactions = [];
+let transactions = [];
 
 let balance = {
   incomes: 0,
@@ -25,6 +27,11 @@ openModalBtn.addEventListener("click", (e) => {
 closeBtn.addEventListener("click", (e) => {
   e.preventDefault();
   toggleModal();
+});
+
+saveBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  saveTransaction();
 });
 
 function toggleModal() {
@@ -47,15 +54,15 @@ function clearModal() {
 
 function renderTransactions() {
   tbody.innerHTML = "";
-  transactions.map(({ description, amount, date }) => {
+  transactions.map(({ id, description, amount, date }) => {
     const tr = document.createElement("tr");
     const transaction = `
               <td>${description}</td>
               <td>${formatCurrency(amount)}</td>
               <td>${formatDate(date)}</td>
               <td class="action-area">
-                  <i class="fa-solid fa-pen" title="editar"></i>
-                  <i class="fa-solid fa-trash" title="excluir"></i>
+                  <i class="fa-solid fa-pen" title="editar" data-id="${id}"></i>
+                  <i class="fa-solid fa-trash" title="excluir" data-id="${id}"></i>
               </td>
         `;
 
@@ -70,25 +77,29 @@ function saveTransaction() {
     amountField.value === "" &&
     dateField.value === ""
   ) {
-    return false;
+    alert("Por favor, preencha todos os campos");
+  } else {
+    id++;
+    const description = descriptionField.value.trim();
+    const amount = Number(amountField.value.trim());
+    const date = dateField.value;
+
+    transactions.push({
+      id,
+      description,
+      amount,
+      date,
+    });
+
+    setLocalStorage(transactions);
+    renderTransactions();
+    clearModal();
+    updateBalance();
+    toggleModal();
   }
-
-  id++;
-  const description = descriptionField.value.trim();
-  const amount = Number(amountField.value.trim());
-  const date = dateField.value;
-
-  transactions.push({
-    id,
-    description,
-    amount,
-    date,
-  });
-
-  renderTransactions();
-  clearModal();
-  updateBalance();
 }
+
+function editTransaction() {}
 
 function formatCurrency(value) {
   const amount = value.toLocaleString("pt-BR", {
@@ -131,8 +142,21 @@ function updateBalance() {
   renderBalance();
 }
 
-saveBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  saveTransaction();
-  toggleModal();
-});
+function setLocalStorage(transactions) {
+  localStorage.setItem("@transactions", JSON.stringify(transactions));
+}
+
+function getLocalStorage() {
+  return JSON.parse(localStorage.getItem("@transactions"));
+}
+
+function app() {
+  transactions = getLocalStorage() || [];
+  if (transactions.length > 0) {
+    id = transactions.length;
+  }
+  renderTransactions();
+  updateBalance();
+}
+
+app();
