@@ -63,33 +63,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Conta de água</td>
-            <td>R$ 75,00</td>
-            <td>15/05/2024</td>
-            <td class="action-area">
-              <i class="fa-solid fa-pen" title="editar"></i>
-              <i class="fa-solid fa-trash" title="excluir"></i>
-            </td>
-          </tr>
-          <tr>
-            <td>Conta de água</td>
-            <td>R$ 75,00</td>
-            <td>15/05/2024</td>
-            <td class="action-area">
-              <i class="fa-solid fa-pen" title="editar"></i>
-              <i class="fa-solid fa-trash" title="excluir"></i>
-            </td>
-          </tr>
-          <tr>
-            <td>Conta de água</td>
-            <td>R$ 75,00</td>
-            <td>15/05/2024</td>
-            <td class="action-area">
-              <i class="fa-solid fa-pen" title="editar"></i>
-              <i class="fa-solid fa-trash" title="excluir"></i>
-            </td>
-          </tr>
+
         </tbody>
       </table>
     </section>
@@ -103,12 +77,12 @@
     <div class="modal-content">
       <h2>Adicionar transação</h2>
       <form>
-        <input type="text" placeholder="Descrição...">
-        <input type="text" placeholder="R$ 0,00">
-        <input type="date" placeholder="dd/mm/aaaa">
+        <input type="text" placeholder="Descrição..." id="description">
+        <input type="text" placeholder="R$ 0,00" id="amount">
+        <input type="date" placeholder="dd/mm/aaaa" id="date">
         <div class="modal-btn-area">
           <button class="cancel" id="close-btn">Cancelar</button>
-          <button class="save">Salvar</button>
+          <button class="save" id="save-btn">Salvar</button>
         </div>
       </form>
     </div>
