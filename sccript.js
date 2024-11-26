@@ -23,6 +23,25 @@ closeBtn.onclick = (e) => {
   modal.classList.remove("show");
 };
 
+function renderTransactions() {
+  tbody.innerHTML = "";
+  transactions.map(({ description, amount, date }) => {
+    const tr = document.createElement("tr");
+    const transaction = `
+              <td>${description}</td>
+              <td>${amount}</td>
+              <td>${date}</td>
+              <td class="action-area">
+                  <i class="fa-solid fa-pen" title="editar"></i>
+                  <i class="fa-solid fa-trash" title="excluir"></i>
+              </td>
+        `;
+
+    tr.innerHTML = transaction;
+    tbody.appendChild(tr);
+  });
+}
+
 function saveTransaction() {
   if (
     descriptionField.value === "" &&
@@ -44,22 +63,7 @@ function saveTransaction() {
     date,
   });
 
-  console.log(transactions);
-
-  //   const tr = document.createElement("tr");
-  //   const transaction = `
-  //         <td>${description}</td>
-  //         <td>${amount}</td>
-  //         <td>${date}</td>
-  //         <td class="action-area">
-  //             <i class="fa-solid fa-pen" title="editar"></i>
-  //             <i class="fa-solid fa-trash" title="excluir"></i>
-  //         </td>
-  //   `;
-
-  //   tr.innerHTML = transaction;
-
-  //   tbody.appendChild(tr);
+  renderTransactions();
 }
 
 saveBtn.addEventListener("click", (e) => {
