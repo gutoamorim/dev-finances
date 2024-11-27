@@ -8,8 +8,6 @@ const dateField = document.querySelector("#date");
 const closeBtn = document.querySelector("#close-btn");
 const saveBtn = document.querySelector("#save-btn");
 
-const ediButtons = document.querySelectorAll(".fa-pen");
-
 let id = 0;
 let transactions = [];
 
@@ -52,6 +50,18 @@ function clearModal() {
   dateField.value = "";
 }
 
+function handleDelete(id) {
+  const confirmDelete = window.confirm(
+    "Tem certeza que deseja excluir a transação?"
+  );
+  if (confirmDelete) {
+    transactions = transactions.filter((transaction) => transaction.id !== id);
+    setLocalStorage(transactions);
+    updateBalance();
+    renderTransactions();
+  }
+}
+
 function renderTransactions() {
   tbody.innerHTML = "";
   transactions.map(({ id, description, amount, date }) => {
@@ -61,8 +71,8 @@ function renderTransactions() {
               <td>${formatCurrency(amount)}</td>
               <td>${formatDate(date)}</td>
               <td class="action-area">
-                  <i class="fa-solid fa-pen" title="editar" data-id="${id}"></i>
-                  <i class="fa-solid fa-trash" title="excluir" data-id="${id}"></i>
+                  <i class="fa-solid fa-pen" title="editar" onclick="handleEdit(${id})"></i>
+                  <i class="fa-solid fa-trash" title="excluir" onclick="handleDelete(${id})"></i>
               </td>
         `;
 
