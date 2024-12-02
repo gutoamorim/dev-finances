@@ -9,8 +9,8 @@ const dateField = document.querySelector("#date");
 const closeBtn = document.querySelector("#close-btn");
 const saveBtn = document.querySelector("#save-btn");
 
-let id = 0;
-let transactions = [];
+let id = getLocalStorage().id;
+let transactions = getLocalStorage().transactions;
 
 let balance = {
   incomes: 0,
@@ -170,10 +170,16 @@ function updateBalance() {
 
 function setLocalStorage(transactions) {
   localStorage.setItem("@transactions", JSON.stringify(transactions));
+  localStorage.setItem("@id", id);
 }
 
 function getLocalStorage() {
-  return JSON.parse(localStorage.getItem("@transactions"));
+  const transactions = JSON.parse(localStorage.getItem("@transactions")) || [];
+  const id = localStorage.getItem("@id") || 0;
+  return {
+    transactions,
+    id,
+  };
 }
 
 function renderTransactions() {
@@ -196,10 +202,6 @@ function renderTransactions() {
 }
 
 function app() {
-  transactions = getLocalStorage() || [];
-  if (transactions.length > 0) {
-    id = transactions.length;
-  }
   renderTransactions();
   updateBalance();
 }
