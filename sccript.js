@@ -1,3 +1,4 @@
+const filterInput = document.querySelector("#filter-input");
 const openModalBtn = document.querySelector("#open-modal-btn");
 const modal = document.querySelector("#modal");
 const tbody = document.querySelector("tbody");
@@ -11,12 +12,13 @@ const saveBtn = document.querySelector("#save-btn");
 
 let id = getLocalStorage().id;
 let transactions = getLocalStorage().transactions;
-
 let balance = {
   incomes: 0,
   expenses: 0,
   total: 0,
 };
+
+filterInput.addEventListener("input", (e) => handleFilter(e.target.value));
 
 openModalBtn.addEventListener("click", (e) => {
   e.preventDefault();
@@ -125,8 +127,6 @@ function saveTransaction() {
   toggleModal();
 }
 
-function editTransaction(id) {}
-
 function formatCurrency(value) {
   const amount = value.toLocaleString("pt-BR", {
     style: "currency",
@@ -182,23 +182,47 @@ function getLocalStorage() {
   };
 }
 
-function renderTransactions() {
-  tbody.innerHTML = "";
-  transactions.map(({ id, description, amount, date }) => {
-    const tr = document.createElement("tr");
-    const transaction = `
-              <td>${description}</td>
-              <td>${formatCurrency(amount)}</td>
-              <td>${formatDate(date)}</td>
-              <td class="action-area">
-                  <i class="fa-solid fa-pen" title="editar" onclick="toggleModal(${id})"></i>
-                  <i class="fa-solid fa-trash" title="excluir" onclick="handleDelete(${id})"></i>
-              </td>
-        `;
+function handleFilter(filter) {
+  let transactionsFilter = transactions.filter((t) =>
+    t.description.includes(filter)
+  );
+  renderTransactions(transactionsFilter);
+}
 
-    tr.innerHTML = transaction;
-    tbody.appendChild(tr);
-  });
+function renderTransactions(search) {
+  tbody.innerHTML = "";
+  let tranactionsList;
+  if (search) {
+    if (search.length === 0 && filterInput.value.length > 0) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td colspan="4" style="text-align: center;  background-color: #f0f2f5;">Nenhuma transação encontrada</td>`;
+      tbody.appendChild(tr);
+    } else if (search.length === 0 && filterInput.value.length === 0) {
+      tranactionsList = transactions;
+    } else if (search.length > 0) {
+      tranactionsList = search;
+    }
+  } else {
+    tranactionsList = transactions;
+  }
+
+  if (tranactionsList && tranactionsList.length > 0) {
+    tranactionsList.map(({ id, description, amount, date }) => {
+      const tr = document.createElement("tr");
+      const transaction = `
+                <td>${description}</td>
+                <td>${formatCurrency(amount)}</td>
+                <td>${formatDate(date)}</td>
+                <td class="action-area">
+                    <i class="fa-solid fa-pen" title="editar" onclick="toggleModal(${id})"></i>
+                    <i class="fa-solid fa-trash" title="excluir" onclick="handleDelete(${id})"></i>
+                </td>
+          `;
+
+      tr.innerHTML = transaction;
+      tbody.appendChild(tr);
+    });
+  }
 }
 
 function app() {
