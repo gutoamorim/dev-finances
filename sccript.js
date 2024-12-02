@@ -2,6 +2,7 @@ const openModalBtn = document.querySelector("#open-modal-btn");
 const modal = document.querySelector("#modal");
 const tbody = document.querySelector("tbody");
 
+const transactionId = document.querySelector("#transaction-id");
 const descriptionField = document.querySelector("#description");
 const amountField = document.querySelector("#amount");
 const dateField = document.querySelector("#date");
@@ -32,7 +33,26 @@ saveBtn.addEventListener("click", (e) => {
   saveTransaction();
 });
 
-function toggleModal() {
+function renderModal(id) {
+  const h2 = document.querySelector("#modal h2");
+  if (id) {
+    h2.textContent = "Editar Transação";
+    const transactionEdit = transactions.find((t) => t.id === id);
+    transactionId.value = transactionEdit.id;
+    descriptionField.value = transactionEdit.description;
+    amountField.value = transactionEdit.amount;
+    dateField.value = transactionEdit.date;
+  } else {
+    h2.textContent = "Adicionar transação";
+    transactionId.value = undefined;
+    descriptionField.value = "";
+    amountField.value = "";
+    dateField.value = "";
+  }
+  descriptionField.focus();
+}
+
+function toggleModal(id) {
   clearModal();
   if (modal.classList.contains("show")) {
     modal.classList.remove("show");
@@ -40,7 +60,7 @@ function toggleModal() {
   } else {
     modal.classList.remove("hide");
     modal.classList.add("show");
-    descriptionField.focus();
+    renderModal(id);
   }
 }
 
@@ -62,25 +82,6 @@ function handleDelete(id) {
   }
 }
 
-function renderTransactions() {
-  tbody.innerHTML = "";
-  transactions.map(({ id, description, amount, date }) => {
-    const tr = document.createElement("tr");
-    const transaction = `
-              <td>${description}</td>
-              <td>${formatCurrency(amount)}</td>
-              <td>${formatDate(date)}</td>
-              <td class="action-area">
-                  <i class="fa-solid fa-pen" title="editar" onclick="handleEdit(${id})"></i>
-                  <i class="fa-solid fa-trash" title="excluir" onclick="handleDelete(${id})"></i>
-              </td>
-        `;
-
-    tr.innerHTML = transaction;
-    tbody.appendChild(tr);
-  });
-}
-
 function saveTransaction() {
   if (
     descriptionField.value === "" &&
@@ -88,7 +89,10 @@ function saveTransaction() {
     dateField.value === ""
   ) {
     alert("Por favor, preencha todos os campos");
-  } else {
+    return;
+  }
+
+  if (transactionId.value === "undefined") {
     id++;
     const description = descriptionField.value.trim();
     const amount = Number(amountField.value.trim());
@@ -100,16 +104,28 @@ function saveTransaction() {
       amount,
       date,
     });
-
-    setLocalStorage(transactions);
-    renderTransactions();
-    clearModal();
-    updateBalance();
-    toggleModal();
+  } else {
+    const transactionIdex = transactions.findIndex(
+      (transaction) => transaction.id === +transactionId.value
+    );
+    if (transactionIdex !== -1) {
+      transactions[transactionIdex] = {
+        id: transactions[transactionIdex].id,
+        description: descriptionField.value.trim(),
+        amount: Number(amountField.value.trim()),
+        date: dateField.value,
+      };
+    }
   }
+
+  setLocalStorage(transactions);
+  renderTransactions();
+  clearModal();
+  updateBalance();
+  toggleModal();
 }
 
-function editTransaction() {}
+function editTransaction(id) {}
 
 function formatCurrency(value) {
   const amount = value.toLocaleString("pt-BR", {
@@ -158,6 +174,25 @@ function setLocalStorage(transactions) {
 
 function getLocalStorage() {
   return JSON.parse(localStorage.getItem("@transactions"));
+}
+
+function renderTransactions() {
+  tbody.innerHTML = "";
+  transactions.map(({ id, description, amount, date }) => {
+    const tr = document.createElement("tr");
+    const transaction = `
+              <td>${description}</td>
+              <td>${formatCurrency(amount)}</td>
+              <td>${formatDate(date)}</td>
+              <td class="action-area">
+                  <i class="fa-solid fa-pen" title="editar" onclick="toggleModal(${id})"></i>
+                  <i class="fa-solid fa-trash" title="excluir" onclick="handleDelete(${id})"></i>
+              </td>
+        `;
+
+    tr.innerHTML = transaction;
+    tbody.appendChild(tr);
+  });
 }
 
 function app() {
