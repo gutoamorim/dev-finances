@@ -130,7 +130,11 @@ function saveTransaction() {
     id++;
     const description = descriptionField.value.trim();
     const amount = Number(
-      amountField.value.replace("R$", "").replace(",", ".").trim()
+      amountField.value
+        .replace("R$", "")
+        .replace(/\./g, "")
+        .replace(",", ".")
+        .trim()
     );
     const date = dateField.value;
 
@@ -151,7 +155,11 @@ function saveTransaction() {
         type: typeTransaction,
         description: descriptionField.value.trim(),
         amount: Number(
-          amountField.value.replace("R$", "").replace(",", ".").trim()
+          amountField.value
+            .replace("R$", "")
+            .replace(/\./g, "")
+            .replace(",", ".")
+            .trim()
         ),
         date: dateField.value,
       };
