@@ -25,6 +25,11 @@ openModalBtn.addEventListener("click", (e) => {
   toggleModal();
 });
 
+amountField.addEventListener("input", (e) => {
+  const value = Number(e.target.value.replace(/[^0-9]/g, "")) / 100;
+  e.target.value = formatCurrency(value);
+});
+
 closeBtn.addEventListener("click", (e) => {
   e.preventDefault();
   toggleModal();
@@ -42,7 +47,7 @@ function renderModal(id) {
     const transactionEdit = transactions.find((t) => t.id === id);
     transactionId.value = transactionEdit.id;
     descriptionField.value = transactionEdit.description;
-    amountField.value = transactionEdit.amount;
+    amountField.value = formatCurrency(transactionEdit.amount);
     dateField.value = transactionEdit.date;
   } else {
     h2.textContent = "Adicionar transação";
@@ -97,7 +102,9 @@ function saveTransaction() {
   if (transactionId.value === "undefined") {
     id++;
     const description = descriptionField.value.trim();
-    const amount = Number(amountField.value.trim());
+    const amount = Number(
+      amountField.value.replace("R$", "").replace(",", ".").trim()
+    );
     const date = dateField.value;
 
     transactions.push({
