@@ -121,7 +121,9 @@ function saveTransaction() {
       transactions[transactionIdex] = {
         id: transactions[transactionIdex].id,
         description: descriptionField.value.trim(),
-        amount: Number(amountField.value.trim()),
+        amount: Number(
+          amountField.value.replace("R$", "").replace(",", ".").trim()
+        ),
         date: dateField.value,
       };
     }
