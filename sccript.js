@@ -4,6 +4,7 @@ const modal = document.querySelector("#modal");
 const tbody = document.querySelector("tbody");
 
 const transactionId = document.querySelector("#transaction-id");
+const typesTransactionField = document.querySelectorAll("input[type='radio']");
 const descriptionField = document.querySelector("#description");
 const amountField = document.querySelector("#amount");
 const dateField = document.querySelector("#date");
@@ -11,6 +12,7 @@ const closeBtn = document.querySelector("#close-btn");
 const saveBtn = document.querySelector("#save-btn");
 
 let id = getLocalStorage().id;
+let typeTransaction;
 let transactions = getLocalStorage().transactions;
 let balance = {
   incomes: 0,
@@ -23,6 +25,13 @@ filterInput.addEventListener("input", (e) => handleFilter(e.target.value));
 openModalBtn.addEventListener("click", (e) => {
   e.preventDefault();
   toggleModal();
+});
+
+typesTransactionField.forEach((input) => {
+  input.addEventListener("change", () => {
+    typeTransaction = getTypeTransaction();
+    console.log(typeTransaction);
+  });
 });
 
 amountField.addEventListener("input", (e) => {
@@ -40,25 +49,6 @@ saveBtn.addEventListener("click", (e) => {
   saveTransaction();
 });
 
-function renderModal(id) {
-  const h2 = document.querySelector("#modal h2");
-  if (id) {
-    h2.textContent = "Editar Transação";
-    const transactionEdit = transactions.find((t) => t.id === id);
-    transactionId.value = transactionEdit.id;
-    descriptionField.value = transactionEdit.description;
-    amountField.value = formatCurrency(transactionEdit.amount);
-    dateField.value = transactionEdit.date;
-  } else {
-    h2.textContent = "Adicionar transação";
-    transactionId.value = undefined;
-    descriptionField.value = "";
-    amountField.value = "";
-    dateField.value = "";
-  }
-  descriptionField.focus();
-}
-
 function toggleModal(id) {
   clearModal();
   if (modal.classList.contains("show")) {
@@ -72,9 +62,44 @@ function toggleModal(id) {
 }
 
 function clearModal() {
+  typesTransactionField.forEach((input) => (input.checked = false));
   descriptionField.value = "";
   amountField.value = "";
   dateField.value = "";
+}
+
+function getTypeTransaction() {
+  const type = document.querySelector("input[name='type']:checked");
+
+  if (type) {
+    return type.id;
+  } else {
+    return undefined;
+  }
+}
+
+function renderModal(id) {
+  const h2 = document.querySelector("#modal h2");
+  if (id) {
+    h2.textContent = "Editar Transação";
+    const transactionEdit = transactions.find((t) => t.id === id);
+    transactionId.value = transactionEdit.id;
+    typesTransactionField.forEach((input) => {
+      if (input.id === transactionEdit.type) {
+        input.checked = true;
+      }
+    });
+    descriptionField.value = transactionEdit.description;
+    amountField.value = formatCurrency(transactionEdit.amount);
+    dateField.value = transactionEdit.date;
+  } else {
+    h2.textContent = "Adicionar transação";
+    transactionId.value = undefined;
+    descriptionField.value = "";
+    amountField.value = "";
+    dateField.value = "";
+  }
+  descriptionField.focus();
 }
 
 function handleDelete(id) {
@@ -90,9 +115,11 @@ function handleDelete(id) {
 }
 
 function saveTransaction() {
+  const typeTransaction = getTypeTransaction();
   if (
-    descriptionField.value === "" &&
-    amountField.value === "" &&
+    typeTransaction === undefined ||
+    descriptionField.value === "" ||
+    amountField.value === "" ||
     dateField.value === ""
   ) {
     alert("Por favor, preencha todos os campos");
@@ -109,6 +136,7 @@ function saveTransaction() {
 
     transactions.push({
       id,
+      type: typeTransaction,
       description,
       amount,
       date,
@@ -120,6 +148,7 @@ function saveTransaction() {
     if (transactionIdex !== -1) {
       transactions[transactionIdex] = {
         id: transactions[transactionIdex].id,
+        type: typeTransaction,
         description: descriptionField.value.trim(),
         amount: Number(
           amountField.value.replace("R$", "").replace(",", ".").trim()
@@ -165,9 +194,9 @@ function updateBalance() {
   balance.expenses = 0;
 
   transactions.forEach((transaction) => {
-    if (transaction.amount > 0) {
+    if (transaction.type === "income") {
       balance.incomes += transaction.amount;
-    } else {
+    } else if (transaction.type === "expense") {
       balance.expenses += Math.abs(transaction.amount);
     }
   });

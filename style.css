@@ -186,6 +186,16 @@ form input {
   outline: none;
 }
 
+.types {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.type-input {
+  cursor: pointer;
+}
+
 .modal-btn-area {
   display: flex;
   gap: 1rem;

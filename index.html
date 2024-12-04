@@ -77,6 +77,16 @@
       <h2></h2>
       <form>
         <input type="hidden" id="transaction-id">
+        <div class="types">
+          <label for="income" class="type-input">
+            <input type="radio" name="type" id="income">
+            Receita
+          </label>
+          <label for="expense" class="type-input">
+            <input type="radio" name="type" id="expense">
+            Despesa
+          </label>
+        </div>
         <input type="text" placeholder="Descrição..." id="description">
         <input type="text" placeholder="R$ 0,00" id="amount">
         <input type="date" placeholder="dd/mm/aaaa" id="date">
