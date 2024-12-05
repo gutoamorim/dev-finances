@@ -11,14 +11,8 @@ const dateField = document.querySelector("#date");
 const closeBtn = document.querySelector("#close-btn");
 const saveBtn = document.querySelector("#save-btn");
 
-let id = getLocalStorage().id;
-let typeTransaction;
-let transactions = getLocalStorage().transactions;
-let balance = {
-  incomes: 0,
-  expenses: 0,
-  total: 0,
-};
+let { id, transactions } = getLocalStorage();
+let balance = { incomes: 0, expenses: 0, total: 0 };
 
 filterInput.addEventListener("input", (e) => handleFilter(e.target.value));
 
@@ -30,13 +24,11 @@ openModalBtn.addEventListener("click", (e) => {
 typesTransactionField.forEach((input) => {
   input.addEventListener("change", () => {
     typeTransaction = getTypeTransaction();
-    console.log(typeTransaction);
   });
 });
 
 amountField.addEventListener("input", (e) => {
-  const value = Number(e.target.value.replace(/[^0-9]/g, "")) / 100;
-  e.target.value = formatCurrency(value);
+  e.target.value = formatCurrency(parseAmount(e.target.value));
 });
 
 closeBtn.addEventListener("click", (e) => {
@@ -49,16 +41,14 @@ saveBtn.addEventListener("click", (e) => {
   saveTransaction();
 });
 
-function toggleModal(id) {
+function parseAmount(value) {
+  return Number(value.replace(/[^0-9]/g, "")) / 100;
+}
+
+function toggleModal(id = null) {
   clearModal();
-  if (modal.classList.contains("show")) {
-    modal.classList.remove("show");
-    modal.classList.add("hide");
-  } else {
-    modal.classList.remove("hide");
-    modal.classList.add("show");
-    renderModal(id);
-  }
+  modal.classList.toggle("show");
+  renderModal(id);
 }
 
 function clearModal() {
@@ -70,43 +60,29 @@ function clearModal() {
 
 function getTypeTransaction() {
   const type = document.querySelector("input[name='type']:checked");
-
-  if (type) {
-    return type.id;
-  } else {
-    return undefined;
-  }
+  return type ? type.id : undefined;
 }
 
 function renderModal(id) {
   const h2 = document.querySelector("#modal h2");
-  if (id) {
-    h2.textContent = "Editar Transação";
-    const transactionEdit = transactions.find((t) => t.id === id);
-    transactionId.value = transactionEdit.id;
+  const transaction = id ? transactions.find((t) => t.id === id) : null;
+
+  h2.textContent = id ? "Editar Transação" : "Adicionar transação";
+  transactionId.value = transaction ? transaction.id : undefined;
+  if (transaction) {
     typesTransactionField.forEach((input) => {
-      if (input.id === transactionEdit.type) {
-        input.checked = true;
-      }
+      input.checked = input.id === transaction.type;
     });
-    descriptionField.value = transactionEdit.description;
-    amountField.value = formatCurrency(transactionEdit.amount);
-    dateField.value = transactionEdit.date;
-  } else {
-    h2.textContent = "Adicionar transação";
-    transactionId.value = undefined;
-    descriptionField.value = "";
-    amountField.value = "";
-    dateField.value = "";
+    descriptionField.value = transaction.description;
+    amountField.value = formatCurrency(transaction.amount);
+    dateField.value = transaction.date;
   }
+
   descriptionField.focus();
 }
 
 function handleDelete(id) {
-  const confirmDelete = window.confirm(
-    "Tem certeza que deseja excluir a transação?"
-  );
-  if (confirmDelete) {
+  if (window.confirm("Tem certeza que deseja excluir a transação?")) {
     transactions = transactions.filter((transaction) => transaction.id !== id);
     setLocalStorage(transactions);
     updateBalance();
@@ -116,52 +92,29 @@ function handleDelete(id) {
 
 function saveTransaction() {
   const typeTransaction = getTypeTransaction();
-  if (
-    typeTransaction === undefined ||
-    descriptionField.value === "" ||
-    amountField.value === "" ||
-    dateField.value === ""
-  ) {
+  const description = descriptionField.value.trim();
+  const amount = parseAmount(amountField.value);
+  const date = dateField.value;
+
+  if (!typeTransaction || !description || !amount || !date) {
     alert("Por favor, preencha todos os campos");
     return;
   }
 
   if (transactionId.value === "undefined") {
     id++;
-    const description = descriptionField.value.trim();
-    const amount = Number(
-      amountField.value
-        .replace("R$", "")
-        .replace(/\./g, "")
-        .replace(",", ".")
-        .trim()
-    );
-    const date = dateField.value;
-
-    transactions.push({
-      id,
-      type: typeTransaction,
-      description,
-      amount,
-      date,
-    });
+    transactions.push({ id, type: typeTransaction, description, amount, date });
   } else {
-    const transactionIdex = transactions.findIndex(
-      (transaction) => transaction.id === +transactionId.value
+    const transactionIndex = transactions.findIndex(
+      (t) => t.id === +transactionId.value
     );
-    if (transactionIdex !== -1) {
-      transactions[transactionIdex] = {
-        id: transactions[transactionIdex].id,
+    if (transactionIndex !== -1) {
+      transactions[transactionIndex] = {
+        id: transactions[transactionIndex].id,
         type: typeTransaction,
-        description: descriptionField.value.trim(),
-        amount: Number(
-          amountField.value
-            .replace("R$", "")
-            .replace(/\./g, "")
-            .replace(",", ".")
-            .trim()
-        ),
-        date: dateField.value,
+        description,
+        amount,
+        date,
       };
     }
   }
@@ -174,17 +127,7 @@ function saveTransaction() {
 }
 
 function formatCurrency(value) {
-  const amount = value.toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  });
-
-  return amount;
-}
-
-function formatDate(date) {
-  const partes = date.split("-");
-  return `${partes[2]}/${partes[1]}/${partes[0]}`;
+  return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
 function renderBalance() {
@@ -198,8 +141,7 @@ function renderBalance() {
 }
 
 function updateBalance() {
-  balance.incomes = 0;
-  balance.expenses = 0;
+  balance = { incomes: 0, expenses: 0, total: 0 };
 
   transactions.forEach((transaction) => {
     if (transaction.type === "income") {
@@ -210,7 +152,6 @@ function updateBalance() {
   });
 
   balance.total = balance.incomes - balance.expenses;
-
   renderBalance();
 }
 
@@ -222,53 +163,38 @@ function setLocalStorage(transactions) {
 function getLocalStorage() {
   const transactions = JSON.parse(localStorage.getItem("@transactions")) || [];
   const id = localStorage.getItem("@id") || 0;
-  return {
-    transactions,
-    id,
-  };
+  return { transactions, id };
 }
 
 function handleFilter(filter) {
-  let transactionsFilter = transactions.filter((t) =>
-    t.description.includes(filter)
-  );
-  renderTransactions(transactionsFilter);
+  const filtered = transactions.filter((t) => t.description.includes(filter));
+  renderTransactions(filtered);
 }
 
-function renderTransactions(search) {
+function renderTransactions(filteredTransactions = transactions) {
   tbody.innerHTML = "";
-  let tranactionsList;
-  if (search) {
-    if (search.length === 0 && filterInput.value.length > 0) {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td colspan="4" style="text-align: center;  background-color: #f0f2f5;">Nenhuma transação encontrada</td>`;
-      tbody.appendChild(tr);
-    } else if (search.length === 0 && filterInput.value.length === 0) {
-      tranactionsList = transactions;
-    } else if (search.length > 0) {
-      tranactionsList = search;
-    }
-  } else {
-    tranactionsList = transactions;
+  if (!filteredTransactions.length) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; background-color: #f0f2f5;">Nenhuma transação encontrada</td></tr>`;
+    return;
   }
 
-  if (tranactionsList && tranactionsList.length > 0) {
-    tranactionsList.map(({ id, description, amount, date }) => {
-      const tr = document.createElement("tr");
-      const transaction = `
-                <td>${description}</td>
-                <td>${formatCurrency(amount)}</td>
-                <td>${formatDate(date)}</td>
-                <td class="action-area">
-                    <i class="fa-solid fa-pen" title="editar" onclick="toggleModal(${id})"></i>
-                    <i class="fa-solid fa-trash" title="excluir" onclick="handleDelete(${id})"></i>
-                </td>
-          `;
+  filteredTransactions.forEach(({ id, description, amount, date }) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${description}</td>
+      <td>${formatCurrency(amount)}</td>
+      <td>${formatDate(date)}</td>
+      <td class="action-area">
+        <i class="fa-solid fa-pen" title="editar" onclick="toggleModal(${id})"></i>
+        <i class="fa-solid fa-trash" title="excluir" onclick="handleDelete(${id})"></i>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
 
-      tr.innerHTML = transaction;
-      tbody.appendChild(tr);
-    });
-  }
+function formatDate(date) {
+  return date.split("-").reverse().join("/");
 }
 
 function app() {
